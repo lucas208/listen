@@ -1,48 +1,60 @@
-import React from 'react'
+import React, { Component }from 'react'
+import PropTypes from 'prop-types'
 
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { Creators as PlaylistsActions } from '../../store/ducks/playlists'
+
+import Loading from '../../components/Loading'
 
 import { Container, Title, List, Playlist } from './styles'
 
-const Browse = () => (
-    <Container>
-        <Title>
-            Navegar
-        </Title>
-        <List>
-            <Playlist to="/playlists/1">
-                <img 
-                    src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/artistic-album-cover-design-template-d12ef0296af80b58363dc0deef077ecc_screen.jpg?ts=1561488440"
-                    alt="Playlist"
-                />
-                <strong>Rock sarado</strong>
-                <p>Só o rock sarado irá nos salvar das drogas</p>
-            </Playlist>
-            <Playlist to="/playlists/1">
-                <img 
-                    src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/artistic-album-cover-design-template-d12ef0296af80b58363dc0deef077ecc_screen.jpg?ts=1561488440"
-                    alt="Playlist"
-                />
-                <strong>Rock sarado</strong>
-                <p>Só o rock sarado irá nos salvar das drogas</p>
-            </Playlist>
-            <Playlist to="/playlists/1">
-                <img 
-                    src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/artistic-album-cover-design-template-d12ef0296af80b58363dc0deef077ecc_screen.jpg?ts=1561488440"
-                    alt="Playlist"
-                />
-                <strong>Rock sarado</strong>
-                <p>Só o rock sarado irá nos salvar das drogas</p>
-            </Playlist>
-            <Playlist to="/playlists/1">
-                <img 
-                    src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/artistic-album-cover-design-template-d12ef0296af80b58363dc0deef077ecc_screen.jpg?ts=1561488440"
-                    alt="Playlist"
-                />
-                <strong>Rock sarado</strong>
-                <p>Só o rock sarado irá nos salvar das drogas</p>
-            </Playlist>
-        </List>
-    </Container>
-)
+class Browse extends Component {
+    static propTypes = {
+        getPlaylistsRequest: PropTypes.func.isRequired,
+        playlists: PropTypes.shape({
+                data: PropTypes.arrayOf(PropTypes.shape({
+                id: PropTypes.number,
+                title: PropTypes.string,
+                thumbnail: PropTypes.string,
+                description: PropTypes.string,
+            })),
+            loading: PropTypes.bool,
+        }).isRequired,
+    }
+    
+    componentDidMount() {
+        this.props.getPlaylistRequest()
+    }
+    render() {
+        return (
+            <Container>
+                <Title>
+                    Navegar {this.props.playlists.loading && <Loading/>}
+                </Title>
+                <List>
+                    {this.props.playlists.data.map(playlist =>(
+                        <Playlist key={playlist.id} to={`/playlists${playlist.id}`}>
+                            <img 
+                                src={playlist.thumbnail}
+                                alt={playlist.title}
+                            />
+                            <strong>{playlist.title}</strong>
+                            <p>{playlist.description}</p>
+                        </Playlist>
+                    ))}
+                </List>
+            </Container>
+        )
+    }
+}
 
-export default Browse
+const mapStateToProps = state => ({
+    playlists: state.playlists,
+})
+
+const mapDispatchToProps = dispatch => bindActionCreators(PlaylistsActions, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(Browse)
+
+
