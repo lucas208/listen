@@ -24,7 +24,7 @@ class Browse extends Component {
     }
     
     componentDidMount() {
-        this.props.getPlaylistRequest()
+        this.props.getPlaylistsRequest()
     }
     render() {
         return (
