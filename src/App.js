@@ -12,6 +12,8 @@ import Player from './components/Player'
 
 import Header from './components/Header'
 
+import ErrorBox from './components/ErrorBox'
+
 import { BrowserRouter } from 'react-router-dom'
 
 import './config/reactotron'
@@ -30,6 +32,7 @@ const App = () =>(
           <Container>
             <Sidebar/>
             <Content>
+              <ErrorBox/>
               <Header/>
               <Routes/>
             </Content>

@@ -34,7 +34,7 @@ class Browse extends Component {
                 </Title>
                 <List>
                     {this.props.playlists.data.map(playlist =>(
-                        <Playlist key={playlist.id} to={`/playlists${playlist.id}`}>
+                        <Playlist key={playlist.id} to={`/playlists/${playlist.id}`}>
                             <img 
                                 src={playlist.thumbnail}
                                 alt={playlist.title}
